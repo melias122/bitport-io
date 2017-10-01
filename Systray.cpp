@@ -48,12 +48,13 @@ Systray::Systray(const QIcon &icon, QWidget *parent)
 
 	mSystrayIcon = new QSystemTrayIcon(icon, this);
 
-#ifndef Q_OS_LINUX
+#ifdef Q_OS_WIN32
 	QWidgetAction *action = new QWidgetAction(nullptr);
 	action->setDefaultWidget(this);
 
 	QMenu *menu = new QMenu;
 	menu->addAction(action);
+	menu->setMinimumWidth(this->width());
 	mSystrayIcon->setContextMenu(menu);
 #endif
 
@@ -77,14 +78,14 @@ void Systray::start()
 	if (mConfig->token().valid()) {
 		setStatus(Status::Connecting);
 		mSystrayIcon->show();
-#ifdef Q_OS_LINUX
+#ifndef Q_OS_WIN32
 			show();
 #endif
 		mPoll->start(1500);
 
 	} else {
 		mSystrayIcon->hide();
-#ifdef Q_OS_LINUX
+#ifndef Q_OS_WIN32
 			hide();
 #endif
 		mPoll->stop();

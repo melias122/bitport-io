@@ -51,8 +51,23 @@ FORMS += \
     Systray.ui \
     FileItem.ui
 
-INCLUDEPATH += $$PWD
-LIBS += $$PWD/bitport/bitport.a
+win32 {
+    ## Windows common build here
+
+    !contains(QMAKE_TARGET.arch, x86_64) {
+#        HEADERS += $$PWD/bitport/win32/bitport.h
+        LIBS += $$PWD/bitport/win32/bitport.a
+        LIBS += -lwinmm -lntdll -lWs2_32
+    } else {
+        ## Windows x64 (64bit) specific build here
+    }
+}
+
+linux {
+    HEADERS += $$PWD/bitport/linux/bitport.h
+    LIBS += $$PWD/bitport/linux/bitport.a
+}
+
 
 RESOURCES += \
     bitport.qrc

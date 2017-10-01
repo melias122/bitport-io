@@ -2,7 +2,11 @@
 
 #include <QDebug>
 
+#ifdef Q_OS_WIN32
+#include "bitport/win32/bitport.h"
+#else
 #include "bitport/bitport.h"
+#endif
 #include "Config.h"
 
 TokenRetriever::TokenRetriever(const QString &id, const QString &secret, const QString &code)
