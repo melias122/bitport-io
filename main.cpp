@@ -10,6 +10,7 @@ Q_DECLARE_METATYPE(Token)
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+	QApplication::setQuitOnLastWindowClosed(false);
 
 	QRect crop(0, 0, 310, 358);
 	QPixmap logo(":/image/black.png");
