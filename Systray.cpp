@@ -42,11 +42,13 @@ Systray::Systray(const QIcon &icon, QWidget *parent)
 
 	ui->openFolder->setIcon(getAwesome()->icon(fa::folder));
 	ui->openSettings->setIcon(getAwesome()->icon(fa::cogs));
-//	ui->openFolder->setFont(getAwesome()->font(24));
+	ui->quit->setIcon(getAwesome()->icon(fa::timescircle));
+
+	connect(ui->quit, &QPushButton::clicked, QApplication::instance(), &QCoreApplication::quit);
 
 	mSystrayIcon = new QSystemTrayIcon(icon, this);
 
-#ifndef linux
+#ifndef Q_OS_LINUX
 	QWidgetAction *action = new QWidgetAction(nullptr);
 	action->setDefaultWidget(this);
 
@@ -68,7 +70,6 @@ Systray::Systray(const QIcon &icon, QWidget *parent)
 void Systray::setStatus(Status status)
 {
 	ui->status->setText(toStringStatus[status]);
-//	qDebug() << toStringStatus[status];
 }
 
 void Systray::start()
@@ -76,14 +77,14 @@ void Systray::start()
 	if (mConfig->token().valid()) {
 		setStatus(Status::Connecting);
 		mSystrayIcon->show();
-#ifdef linux
+#ifdef Q_OS_LINUX
 			show();
 #endif
 		mPoll->start(1500);
 
 	} else {
 		mSystrayIcon->hide();
-#ifdef linux
+#ifdef Q_OS_LINUX
 			hide();
 #endif
 		mPoll->stop();
@@ -133,7 +134,6 @@ void Systray::on_dirSyncFinished(DirSync::Status status)
 
 void Systray::on_fileProgressCreated(FileProgress *f)
 {
-	qDebug() << "on_fileProgress_created" << f;
 	setStatus(Status::Downloading);
 
 	QListWidgetItem *widgetItem = new QListWidgetItem;
@@ -165,6 +165,10 @@ void Systray::on_fileItemDone(FileItem *f)
 
 	ui->recentlyChanged->addItem(item);
 	ui->recentlyChanged->setItemWidget(item, fileItem);
+
+//	while (ui->recentlyChanged->count() > 20) {
+//		delete ui->recentlyChanged->takeItem(ui->recentlyChanged->count() - 1);
+//	}
 }
 
 void Systray::on_openFolder_clicked()
