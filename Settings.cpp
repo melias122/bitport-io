@@ -17,9 +17,6 @@ Settings::Settings(Config *config, QWidget *parent)
 	setFixedSize(width(), height());
 	setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
 
-//    connect(ui->cancel, &QPushButton::clicked, this, &Settings::on_cancel_clicked);
-//    connect(ui->logout, &QPushButton::clicked, this, &Settings::on_logout_clicked);
-
     ui->maxDownloads->setValue(config->maxConcurentDownloads());
     ui->downloadsDir->setText(config->downloadsDir());
 }
@@ -29,7 +26,7 @@ void Settings::closeEvent(QCloseEvent *event)
     // Hide settings dialog instead of closing it.
     // Closing it will close application.
     event->ignore();
-    emit finished(0);
+	emit reject();
 }
 
 void Settings::on_ok_clicked()
