@@ -16,6 +16,8 @@ Login::Login(Config *config, QWidget *parent)
 	setFixedSize(width(), height());
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
+
+	connect(this, &Login::rejected, QApplication::instance(), &QApplication::quit);
 }
 
 Login::~Login()
